@@ -1,2 +1,6 @@
 # nuxt-template
 Nuxt.js, BootstrapVue, Axios, FontAwesome, and more...
+
+### Early Preview
++ Getting cards set up...
+![Preview](./assets/preview.png)

@@ -28,7 +28,7 @@ export default {
         },
         {
           username: "Tim",
-          content: "Feeling different today",
+          content: "You won't believe what happened today!",
           time: 1591170142,
           avatar: "_nuxt/assets/logo.svg",
         },
