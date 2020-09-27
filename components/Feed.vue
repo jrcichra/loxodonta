@@ -22,12 +22,12 @@ export default {
         {
           username: "Justin",
           content: "Feeling happy today",
-          time: 12345,
+          time: 1601178142,
         },
         {
           username: "Tim",
           content: "Feeling different today",
-          time: 67890,
+          time: 1591170142,
         },
       ],
     };
