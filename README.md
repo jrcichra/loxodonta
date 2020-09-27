@@ -1,2 +1,2 @@
-# loxodonta
-A social media platform for privacy-focused mammals
+# nuxt-template
+Nuxt.js, BootstrapVue, Axios, FontAwesome, and more...
