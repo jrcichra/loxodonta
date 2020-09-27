@@ -16,6 +16,9 @@ export default {
             regular: true,
         }
     },
+    plugins: [
+        './plugins/vue-google-oauth2'
+    ]
     // router: {
     //     base: '/dist/'
     // }
