@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <IndexBanner />
+    <Feed />
   </div>
 </template>
 
