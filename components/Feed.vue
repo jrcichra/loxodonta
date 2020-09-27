@@ -2,7 +2,7 @@
   <b-container fluid>
     <b-row v-for="row in feedData" :key="row.id">
       <b-col cols="3"> </b-col>
-      <b-col cols="6" class="feed">
+      <b-col cols="6" class="feed shadow-lg">
         <Card
           :username="row.username"
           :content="row.content"
