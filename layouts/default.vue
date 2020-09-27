@@ -1,5 +1,8 @@
 <template>
-  <Nuxt />
+  <span>
+    <NavBar />
+    <Nuxt />
+  </span>
 </template>
 <script>
 export default {};
@@ -7,13 +10,7 @@ export default {};
 <style>
 html,
 body {
-  height: 100%;
-}
-#__nuxt {
-  height: 100%;
-}
-#__layout {
-  height: 100%;
+  background-color: rgb(129, 115, 148);
 }
 a {
   color: blue;

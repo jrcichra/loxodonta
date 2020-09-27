@@ -15,7 +15,6 @@ export default {
 </script>
 <style scoped>
 .banner {
-  height: 50%;
   text-align: center;
   margin-top: 23rem;
 }
