@@ -4,11 +4,13 @@
       <b-col> <p>Friends</p></b-col>
     </b-row>
     <b-row v-for="friend in friends" :key="friend.id">
-      <SmallFriendCard
-        :username="friend.username"
-        :avatar="friend.avatar"
-        :status="friend.status"
-      />
+      <b-col>
+        <SmallFriendCard
+          :username="friend.username"
+          :avatar="friend.avatar"
+          :status="friend.status"
+        />
+      </b-col>
     </b-row>
   </b-container>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div id="card" class="shadow">
+  <div id="card">
     <slot>
       <img height="40rem" :src="avatar" alt="" />
       <b-container fluid>
@@ -24,7 +24,6 @@ export default {
     avatar: String,
     status: String,
   },
-  computed: {},
   methods: {
     getLocalTime(time) {
       return moment.unix(time).format("dddd, MMMM Do, YYYY h:mm:ss A");

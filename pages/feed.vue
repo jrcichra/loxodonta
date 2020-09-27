@@ -1,11 +1,11 @@
 <template>
   <b-container fluid id="app">
     <b-row>
-      <b-col cols="4"> </b-col>
-      <b-col cols="4">
+      <b-col cols="3"> </b-col>
+      <b-col cols="6">
         <Feed />
       </b-col>
-      <b-col cols="2"> </b-col>
+      <b-col cols="1"> </b-col>
       <b-col cols="2">
         <FriendList />
       </b-col>
