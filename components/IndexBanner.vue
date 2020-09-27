@@ -4,6 +4,10 @@
       <b-col>
         <h1 id="tagline">Self-hosted, private, social networking</h1>
         <h3>First time here? <nuxt-link to="/signup">Sign up</nuxt-link></h3>
+        <h3>
+          We're developing this site?
+          <nuxt-link to="/feed">View the feed</nuxt-link>
+        </h3>
       </b-col>
     </b-row>
   </b-container>
