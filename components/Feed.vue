@@ -1,8 +1,7 @@
 <template>
   <b-container fluid>
     <b-row v-for="row in feedData" :key="row.id">
-      <b-col cols="3"> </b-col>
-      <b-col cols="6" class="feed shadow-lg">
+      <b-col class="feed shadow-lg">
         <Card
           :username="row.username"
           :content="row.content"
@@ -10,7 +9,6 @@
           :avatar="row.avatar"
         />
       </b-col>
-      <b-col cols="3"> </b-col>
     </b-row>
   </b-container>
 </template>
@@ -28,7 +26,7 @@ export default {
         },
         {
           username: "Tim",
-          content: "You won't believe what happened today!",
+          content: "Feeling different today",
           time: 1591170142,
           avatar: "_nuxt/assets/logo.svg",
         },
