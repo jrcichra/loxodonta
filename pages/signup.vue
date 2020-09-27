@@ -1,16 +1,21 @@
+<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+
 <template>
   <div id="app">
+    <meta name="google-signin-client_id" content="877138643526-74o4cnlp6ckl52ld0smmgac0phpn93hh.apps.googleusercontent.com">
+    
     <h1>You would sign in here</h1>
     <b-container class="container">
       <h3 style="text-align: center;">Sign in</h3>
-      <div id="my-signin2"></div>
+      <div class="g-signin2" data-onsuccess="onSignIn"></div>
     </b-container>
   </div>
 </template>
 
-<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 
-<script>
+
+<!--<script>
   function onSuccess(googleUser) {
     console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
   }
@@ -28,7 +33,7 @@
       'onfailure': onFailure
     });
   }
-</script>
+</script>-->
 
 <script>
 export default {
