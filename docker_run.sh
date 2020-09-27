@@ -9,4 +9,4 @@ docker run -it -d\
     -v ${PWD}/plugins:/app/plugins\
     -v ${PWD}/nuxt.config.js:/app/nuxt.config.js\
     --restart=unless-stopped\
-    jrcichra/nuxt-template
+    jrcichra/loxadonta
