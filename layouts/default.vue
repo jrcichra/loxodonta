@@ -15,4 +15,10 @@ body {
 #__layout {
   height: 100%;
 }
+a {
+  color: blue;
+}
+a:hover {
+  color: hotpink;
+}
 </style>

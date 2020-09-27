@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-  <h1> Hello world! </h1>
+    <NavBar />
+    <IndexBanner />
   </div>
 </template>
 
@@ -16,5 +17,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #1a222b;
   height: 100%;
+
+  background-color: rgb(129, 115, 148);
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 </style>
