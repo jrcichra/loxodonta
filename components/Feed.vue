@@ -7,6 +7,7 @@
           :username="row.username"
           :content="row.content"
           :time="row.time"
+          :avatar="row.avatar"
         />
       </b-col>
       <b-col cols="3"> </b-col>
@@ -23,11 +24,13 @@ export default {
           username: "Justin",
           content: "Feeling happy today",
           time: 1601178142,
+          avatar: "_nuxt/assets/logo.svg",
         },
         {
           username: "Tim",
           content: "Feeling different today",
           time: 1591170142,
+          avatar: "_nuxt/assets/logo.svg",
         },
       ],
     };
@@ -37,7 +40,8 @@ export default {
 <style scoped>
 .feed {
   text-align: center;
-  background-color: green;
+  background-color: rgb(26, 26, 26);
+  color: rgb(190, 182, 182);
   margin-top: 1rem;
 }
 </style>
