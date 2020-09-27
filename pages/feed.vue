@@ -1,7 +1,16 @@
 <template>
-  <div id="app">
-    <Feed />
-  </div>
+  <b-container fluid id="app">
+    <b-row>
+      <b-col cols="3"> </b-col>
+      <b-col cols="6">
+        <Feed />
+      </b-col>
+      <b-col cols="1"> </b-col>
+      <b-col cols="2">
+        <FriendList />
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
