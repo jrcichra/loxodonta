@@ -14,8 +14,8 @@ jobs:
       - name: Build and push nuxt container
         run: |
           echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin 
-          docker build -t jrcichra/nuxt-template .
-          docker push jrcichra/nuxt-template
+          docker build -t jrcichra/loxodonta .
+          docker push jrcichra/loxodonta
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
