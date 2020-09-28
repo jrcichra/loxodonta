@@ -2,7 +2,9 @@
   <b-container id="card" fluid>
     <b-row>
       <b-col>
-        <img height="45rem" :src="avatar" alt="" />
+        <nuxt-link class="nolink" :to="`/users/${userid}`">
+          <img height="45rem" :src="avatar" alt="" />
+        </nuxt-link>
       </b-col>
       <b-col class="textslide">
         <span :class="status">{{ username }}</span>
@@ -18,6 +20,7 @@ export default {
     username: String,
     avatar: String,
     status: String,
+    userid: Number,
   },
   methods: {
     getLocalTime(time) {

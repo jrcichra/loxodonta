@@ -9,6 +9,7 @@
           :username="friend.username"
           :avatar="friend.avatar"
           :status="friend.status"
+          :userid="friend.userid"
         />
       </b-col>
     </b-row>
@@ -24,11 +25,13 @@ export default {
           username: "Justin",
           avatar: "_nuxt/assets/logo.svg",
           status: "online",
+          userid: 1,
         },
         {
           username: "Tim",
           avatar: "_nuxt/assets/logo.svg",
           status: "offline",
+          userid: 2,
         },
       ],
     };
