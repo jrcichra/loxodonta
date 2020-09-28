@@ -1,35 +1,54 @@
 <template>
   <b-container fluid @click="generateCard()">
-    <b-row v-for="row in feedData" :key="row.id">
-      <b-col class="feed shadow-lg">
-        <Card
-          :username="row.username"
-          :content="row.content"
-          :time="row.time"
-          :avatar="row.avatar"
-        />
-      </b-col>
-    </b-row>
+    <div v-if="userid === undefined">
+      <b-row v-for="row in feedData" :key="row.id">
+        <b-col class="feed shadow-lg">
+          <Card
+            :username="row.username"
+            :content="row.content"
+            :time="row.time"
+            :avatar="row.avatar"
+          />
+        </b-col>
+      </b-row>
+    </div>
+    <div v-else>
+      <b-row>
+        <b-col class="feed shadow-lg">
+          <Card
+            :username="feedData[userid].username"
+            :content="feedData[userid].content"
+            :time="feedData[userid].time"
+            :avatar="feedData[userid].avatar"
+          />
+        </b-col>
+      </b-row>
+    </div>
   </b-container>
 </template>
 <script>
 import moment from "moment";
 export default {
   name: "Feed",
+  props: {
+    userid: Number,
+  },
   data() {
     return {
       feedData: [
         {
           username: "Justin",
+          userid: 0,
           content: "Feeling happy today.",
           time: 1601178142,
-          avatar: "_nuxt/assets/logo.svg",
+          avatar: "http://localhost:3000/_nuxt/assets/logo.svg",
         },
         {
           username: "Tim",
+          userid: 1,
           content: "Feeling different today.",
           time: 1591170142,
-          avatar: "_nuxt/assets/logo.svg",
+          avatar: "http://localhost:3000/_nuxt/assets/logo.svg",
         },
       ],
     };
@@ -50,7 +69,7 @@ export default {
         username: "Tanner",
         content: s,
         time: Number(moment().format("X")),
-        avatar: "_nuxt/assets/logo.svg",
+        avatar: "http://localhost:3000/_nuxt/assets/logo.svg",
       });
     },
   },

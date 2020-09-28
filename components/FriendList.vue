@@ -13,6 +13,9 @@
         />
       </b-col>
     </b-row>
+    <b-row>
+      <b-col> <p>_</p></b-col>
+    </b-row>
   </b-container>
 </template>
 <script>
@@ -23,15 +26,15 @@ export default {
       friends: [
         {
           username: "Justin",
-          avatar: "_nuxt/assets/logo.svg",
+          avatar: "http://localhost:3000/_nuxt/assets/logo.svg",
           status: "online",
-          userid: 1,
+          userid: 0,
         },
         {
           username: "Tim",
-          avatar: "_nuxt/assets/logo.svg",
+          avatar: "http://localhost:3000/_nuxt/assets/logo.svg",
           status: "offline",
-          userid: 2,
+          userid: 1,
         },
       ],
     };

@@ -7,7 +7,9 @@
         </nuxt-link>
       </b-col>
       <b-col class="textslide">
-        <span :class="status">{{ username }}</span>
+        <nuxt-link class="nolink" :to="`/users/${userid}`">
+          <p :class="status">{{ username }}</p>
+        </nuxt-link>
       </b-col>
     </b-row>
   </b-container>
@@ -42,6 +44,6 @@ export default {
   color: red;
 }
 .textslide {
-  margin-top: 0.5rem;
+  margin-top: 0.6rem;
 }
 </style>
