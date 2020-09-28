@@ -6,7 +6,7 @@
       </b-col>
       <b-col cols="2" id="infocol">
         <p id="username">{{ username }}</p>
-        <p id="time">{{ getLocalTime(time) }}</p>
+        <p id="time">{{ reltime }}</p>
       </b-col>
       <b-col cols="9"></b-col>
     </b-row>
@@ -27,11 +27,25 @@ export default {
     time: Number,
     avatar: String,
   },
-  computed: {},
+  created() {
+    this.genLocalTime();
+    // Update the relative time every second
+    this.timer = setInterval(this.genLocalTime, 1000);
+  },
+  beforeDestroy() {
+    // Clear the timer
+    clearInterval(this.timer);
+  },
   methods: {
-    getLocalTime(time) {
-      return moment.unix(time).fromNow();
+    genLocalTime() {
+      this.reltime = moment.unix(this.time).fromNow();
     },
+  },
+  data() {
+    return {
+      reltime: undefined,
+      timer: undefined,
+    };
   },
 };
 </script>

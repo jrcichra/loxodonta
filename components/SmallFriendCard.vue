@@ -1,19 +1,14 @@
 <template>
-  <div id="card">
-    <slot>
-      <img height="40rem" :src="avatar" alt="" />
-      <b-container fluid>
-        <b-row>
-          <b-col>
-            <p>{{ username }}</p>
-          </b-col>
-          <b-col>
-            <p :style="{ color: statusColor }">{{ status }}</p>
-          </b-col>
-        </b-row>
-      </b-container>
-    </slot>
-  </div>
+  <b-container id="card" fluid>
+    <b-row>
+      <b-col>
+        <img height="45rem" :src="avatar" alt="" />
+      </b-col>
+      <b-col class="textslide">
+        <span :class="status">{{ username }}</span>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script>
 import moment from "moment";
@@ -29,19 +24,21 @@ export default {
       return moment.unix(time).format("dddd, MMMM Do, YYYY h:mm:ss A");
     },
   },
-  computed: {
-    statusColor: function () {
-      return this.status === "online" ? "green" : "red";
-    },
-  },
+  computed: {},
 };
 </script>
 <style scoped>
-.feed {
-  text-align: center;
-  background-color: green;
-  margin-top: 1rem;
-}
 #card {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+.online {
+  color: green;
+}
+.offline {
+  color: red;
+}
+.textslide {
+  margin-top: 0.5rem;
 }
 </style>

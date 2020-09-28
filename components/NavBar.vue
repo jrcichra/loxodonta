@@ -2,10 +2,14 @@
   <b-container fluid class="navbar shadow-lg rounded">
     <b-row>
       <b-col>
-        <img class="logo" alt="Vue logo" src="../assets/logo.svg" />
+        <nuxt-link class="nolink" to="/">
+          <img class="logo" alt="Vue logo" src="../assets/logo.svg" />
+        </nuxt-link>
       </b-col>
       <b-col>
-        <h1 class="title">Loxodonta</h1>
+        <nuxt-link class="nolink" to="/">
+          <h1 class="title">Loxodonta</h1>
+        </nuxt-link>
       </b-col>
     </b-row>
   </b-container>
@@ -32,5 +36,9 @@ export default {
 .title {
   font-size: 17px;
   margin-top: 0.6rem;
+}
+.nolink {
+  color: black;
+  text-decoration: none; /* no underline */
 }
 </style>

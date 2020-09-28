@@ -47,7 +47,7 @@ export default {
         .replace(/[+/]/g, "")
         .substring(0, length);
       this.feedData.push({
-        username: "Randodude",
+        username: "Tanner",
         content: s,
         time: Number(moment().format("X")),
         avatar: "_nuxt/assets/logo.svg",
