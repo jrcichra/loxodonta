@@ -23,4 +23,4 @@ pnpm-debug.log*
 *.sw?
 .nuxt
 server_example/
-server/server
+server/
