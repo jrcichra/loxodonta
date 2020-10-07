@@ -2,7 +2,7 @@
   <b-container fluid id="app">
     <b-row>
       <b-col cols="3"> </b-col>
-      <b-col cols="">
+      <b-col cols="6">
         <Feed />
       </b-col>
       <b-col cols="1"> </b-col>
