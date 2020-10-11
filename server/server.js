@@ -52,7 +52,6 @@ const users = [
         bio: 'Pretty cool guy',
         status: 'online',
         avatar: 'https://loremflickr.com/320/240',
-        // posts: posts.filter(post => post.user_id === 0)
     },
     {
         id: 1,
@@ -61,7 +60,6 @@ const users = [
         bio: 'A brother',
         status: 'offline',
         avatar: 'https://loremflickr.com/320/240',
-        // posts: posts.filter(post => post.user_id === 1)
     },
 ];
 
