@@ -3,6 +3,17 @@ const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
 
+
+// Database
+import Knex from "knex";
+
+const client = Knex({ client: "mysql", connection: { host: "smarty4" , password: "test", user: "pi", database: "loxodonta"} });
+// const resolvers = {
+//   Query: {
+//     post: (_, { id }) => client.from("Posts").where({ id }).first()
+//   }
+// };
+
 // Some fake data
 
 const posts = [
@@ -63,11 +74,12 @@ const users = [
     },
 ];
 
+
 // The GraphQL schema in string form
 const typeDefs = `
     type Query { 
       users: [User], 
-      user(id: ID!): User, 
+      user(id: ID, username: String): User, 
       posts: [Post], 
       post(id: ID!): Post 
     }
@@ -78,7 +90,8 @@ const typeDefs = `
         bio: String, 
         status: String, 
         avatar: String, 
-        posts: [Post] 
+        posts: [Post],
+        friends: [User]
     }
     type Post { 
         id: ID!, 
@@ -98,7 +111,14 @@ const typeDefs = `
 const resolvers = {
     Query: {
         user: (parent, args, context, info) => {
-            return users.find(user => user.id === Number(args.id));
+            
+            if(args.id) {
+                return client.from("users").where({ id: Number(args.id) }).first();
+            } else if(args.username) {
+                return client.from("users").where({ username: Number(args.username) }).first();
+            } else{
+                return client.from("users").orderBy("id");
+            }
         },
         post: (parent, args, conetxt, info) => {
             return posts.find(post => post.id === Number(args.id));
@@ -108,9 +128,11 @@ const resolvers = {
     },
     User: {
         posts: (parent, args, context, info) => {
-            console.log(posts.filter(post => post.user_id === Number(parent.id)))
             return posts.filter(post => post.user_id === Number(parent.id))
-        }
+        },
+        // friends: (parent, args, context, info) => {
+        //     return users.filter(user => )
+        // }
     },
     Post: {
         parent: (p,args,context,info) => {
