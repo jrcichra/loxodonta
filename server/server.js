@@ -65,9 +65,33 @@ const users = [
 
 // The GraphQL schema in string form
 const typeDefs = `
-  type Query { user(id: ID!): User }
-  type User  { id: ID!, created: Int, username: String, bio: String, status: String, avatar: String, posts: [Post] }
-  type Post { id: ID!, created: Int, user_id: Int, text: String, object_set_id: Int, edited: Int, views: Int, upvotes: Int, downvotes: Int, Parent: Int }
+    type Query { 
+      users: [User], 
+      user(id: ID!): User, 
+      posts: [Post], 
+      post(id: ID!): Post 
+    }
+    type User  { 
+        id: ID!, 
+        created: Int, 
+        username: String, 
+        bio: String, 
+        status: String, 
+        avatar: String, 
+        posts: [Post] 
+    }
+    type Post { 
+        id: ID!, 
+        created: Int, 
+        user: User, 
+        text: String, 
+        object_set_id: Int, 
+        edited: Int, 
+        views: Int, 
+        upvotes: Int, 
+        downvotes: Int, 
+        parent: Post 
+    }
 `;
 
 // The resolvers
@@ -76,12 +100,24 @@ const resolvers = {
         user: (parent, args, context, info) => {
             return users.find(user => user.id === Number(args.id));
         },
-        // posts: () => posts,
+        post: (parent, args, conetxt, info) => {
+            return posts.find(post => post.id === Number(args.id));
+        },
+        posts: () => posts,
+        users: () => users,
     },
     User: {
         posts: (parent, args, context, info) => {
             console.log(posts.filter(post => post.user_id === Number(parent.id)))
             return posts.filter(post => post.user_id === Number(parent.id))
+        }
+    },
+    Post: {
+        parent: (p,args,context,info) => {
+            return posts[Number(p.parent)]
+        },
+        user: (p,args,context,info) => {
+            return users.find(user => user.id === Number(p.user_id))
         }
     }
 };
