@@ -1,9 +1,24 @@
+-- drop table object_sets;
+-- drop table friends;
+-- drop table objects;
+-- drop table users;
+-- 
+-- drop table statuses;
+-- drop table status_history;
+-- drop trigger status_history_initial_audit;
+-- drop trigger status_history_audit;
+-- 
+-- drop table posts;
+
+drop database loxodonta;
+create database loxodonta;
+use loxodonta;
+
 create table objects (
 	object_id bigint primary key auto_increment,
 	object_url varchar(1024) not null,
 	object_created timestamp default current_timestamp()
 );
-
 
 create table object_sets (
 	object_set_id bigint not null,
@@ -18,16 +33,18 @@ create table statuses (
 	status_name varchar(255) not null unique
 );
 
+
 create table users (
 	user_id bigint primary key auto_increment,
 	user_name varchar(255) not null unique,
 	user_bio text,
+	user_created timestamp default current_timestamp(),
 	user_status_id bigint not null,
 	user_avatar_object_id bigint,
 	foreign key (user_status_id) references statuses(status_id),
 	foreign key (user_avatar_object_id) references objects(object_id)
 );
-	# roles?
+# roles?
 
 create table status_history (
 	status_history_id bigint primary key auto_increment,
@@ -38,24 +55,24 @@ create table status_history (
 	foreign key (user_status_id) references statuses(status_id)
 );
 
-
-DELIMITER $$
-create trigger status_history_initial_audit
-before insert
-on users for each row
-BEGIN
-insert into status_history (user_id,user_status_id) values (new.user_id, new.user_status_id);
-END; $$
-
-DELIMITER $$
-create trigger status_history_audit
-before update
-on users for each row
-BEGIN
-if old.user_status_id <> new.user_status_id then
-insert into status_history (user_id,user_status_id) values (old.user_id, old.user_status_id);
-end if;
-END; $$
+-- 
+-- DELIMITER $$
+-- create trigger status_history_initial_audit
+-- before insert
+-- on users for each row
+-- BEGIN
+-- insert into status_history (user_id,user_status_id) values (new.user_id, new.user_status_id);
+-- END; $$
+-- 
+-- DELIMITER $$
+-- create trigger status_history_audit
+-- before update
+-- on users for each row
+-- BEGIN
+-- if old.user_status_id <> new.user_status_id then
+-- insert into status_history (user_id,user_status_id) values (old.user_id, old.user_status_id);
+-- end if;
+-- END; $$
 
 create table friends (
 	user_id bigint not null,
@@ -65,14 +82,13 @@ create table friends (
 );
 
 # Posts/Comments
-drop table posts;
 create table posts (
 	post_id bigint primary key auto_increment,
 	post_created timestamp not null default current_timestamp(),
 	post_user_id bigint not null,
 	post_text text not null,
 	post_object_set_id bigint,
-	post_edited timestamp,
+	post_edited timestamp null,
 	post_views bigint not null default 0,
 	post_upvotes bigint not null default 0,
 	post_downvotes bigint not null default 0,
@@ -82,4 +98,22 @@ create table posts (
 	### doesn't work - foreign key (post_object_set_id) references object_sets(object_set_id)
 );
 
+
+
+## dummy data
+insert into statuses (status_id ,status_name) values (1,'offline');
+insert into statuses (status_id ,status_name) values (2,'online');
+insert into users (user_id ,user_name,user_status_id) values (1,'justin',1);
+insert into users (user_id, user_name,user_status_id) values (2,'tim',2);
+insert into objects (object_id ,object_url) values (1,'http://example.com/1.jpg');
+insert into objects (object_id ,object_url) values (2,'http://example.com/2.jpg');
+insert into objects (object_id ,object_url) values (3,'http://example.com/3.jpg');
+insert into object_sets (object_set_id,object_id,object_set_order) values (1,1,0);
+insert into posts (post_user_id,post_text,post_object_set_id, post_views,post_upvotes,post_downvotes) 
+   values (1,'This is a post by justin', 1,40,23,45);
+insert into posts (post_user_id,post_text,post_object_set_id, post_views,post_upvotes,post_downvotes) 
+   values (2,'This is a post by tim', 2,445,213,415);
+insert into posts (post_user_id,post_text,post_object_set_id, post_views,post_upvotes,post_downvotes,post_parent) 
+   values (1,'This is a comment by justin on tims post', 1,40,23,45,2);
+insert into friends (user_id,user_friend_id) values (1,2);
 

@@ -2,78 +2,27 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
-
+const moment = require('moment');
 
 // Database
-import Knex from "knex";
+const Knex = require("knex");
 
-const client = Knex({ client: "mysql", connection: { host: "smarty4" , password: "test", user: "pi", database: "loxodonta"} });
-// const resolvers = {
-//   Query: {
-//     post: (_, { id }) => client.from("Posts").where({ id }).first()
-//   }
-// };
-
-// Some fake data
-
-const posts = [
-    {
-        id: 0,
-        created: 1506045,
-        user_id: 0,
-        text: "This is a post by Justin",
-        object_set_id: undefined,
-        edited: undefined,
-        views: 5,
-        upvotes: 2,
-        downvotes: 3,
-        parent: undefined
-    },
-    {
-        id: 1,
-        created: 1504567,
-        user_id: 1,
-        text: "This is a post by Tim with pictures",
-        object_set_id: 0,
-        edited: undefined,
-        views: 10,
-        upvotes: 200,
-        downvotes: 1,
-        parent: undefined
-    },
-    {
-        id: 2,
-        created: 1504569,
-        user_id: 0,
-        text: "This is a comment Justin put on Tim's popular post",
-        object_set_id: 0,
-        edited: undefined,
-        views: 2,
-        upvotes: 2,
-        downvotes: 100,
-        parent: 1
+const client = Knex({
+    client: "mysql", connection: {
+        host: "smarty4", password: "test", user: "pi", database: "loxodonta",
+        typeCast: function (field, next) {
+            if (field.type === 'TIMESTAMP') {
+                var value = field.string();
+                var m = moment(value).unix();
+                if (isNaN(m)) {
+                    return undefined;
+                }
+                return m;
+            }
+            return next();
+        }
     }
-];
-
-const users = [
-    {
-        id: 0,
-        created: 34534,
-        username: 'jrcichra',
-        bio: 'Pretty cool guy',
-        status: 'online',
-        avatar: 'https://loremflickr.com/320/240',
-    },
-    {
-        id: 1,
-        created: 34243,
-        username: 'tjcichra',
-        bio: 'A brother',
-        status: 'offline',
-        avatar: 'https://loremflickr.com/320/240',
-    },
-];
-
+});
 
 // The GraphQL schema in string form
 const typeDefs = `
@@ -84,26 +33,26 @@ const typeDefs = `
       post(id: ID!): Post 
     }
     type User  { 
-        id: ID!, 
-        created: Int, 
-        username: String, 
-        bio: String, 
-        status: String, 
-        avatar: String, 
-        posts: [Post],
-        friends: [User]
+        user_id: ID!, 
+        user_created: Float, 
+        user_name: String, 
+        user_bio: String, 
+        user_status: String, 
+        user_avatar: String, 
+        user_posts: [Post],
+        user_friends: [User]
     }
     type Post { 
-        id: ID!, 
-        created: Int, 
-        user: User, 
-        text: String, 
-        object_set_id: Int, 
-        edited: Int, 
-        views: Int, 
-        upvotes: Int, 
-        downvotes: Int, 
-        parent: Post 
+        post_id: ID!, 
+        post_created: Float, 
+        post_user_id: User, 
+        post_text: String, 
+        post_object_set_id: Float, 
+        post_edited: Float, 
+        post_views: Float, 
+        post_upvotes: Float, 
+        post_downvotes: Float, 
+        post_parent: Post 
     }
 `;
 
@@ -111,34 +60,35 @@ const typeDefs = `
 const resolvers = {
     Query: {
         user: (parent, args, context, info) => {
-            
-            if(args.id) {
-                return client.from("users").where({ id: Number(args.id) }).first();
-            } else if(args.username) {
+
+            if (args.id) {
+                return client.from("users").where({ user_id: Number(args.id) }).first();
+            } else if (args.username) {
                 return client.from("users").where({ username: Number(args.username) }).first();
-            } else{
-                return client.from("users").orderBy("id");
+            } else {
+                return client.from("users").orderBy("user_id");
             }
         },
-        post: (parent, args, conetxt, info) => {
-            return posts.find(post => post.id === Number(args.id));
+        post: (parent, args, context, info) => {
+            return client.from("posts").where({ post_id: Number(args.id) }).first();
         },
-        posts: () => posts,
-        users: () => users,
+        posts: () => client.from("posts").orderBy("post_id"),
+        users: () => client.from("users").orderBy("user_id"),
     },
     User: {
-        posts: (parent, args, context, info) => {
-            return posts.filter(post => post.user_id === Number(parent.id))
+        user_posts: (parent, args, context, info) => {
+            console.log(`only getting posts from user ${parent.user_id}`)
+            return client.from("posts").where({ post_user_id: Number(parent.user_id) }).orderBy("post_id")
         },
         // friends: (parent, args, context, info) => {
         //     return users.filter(user => )
         // }
     },
     Post: {
-        parent: (p,args,context,info) => {
+        post_parent: (p, args, context, info) => {
             return posts[Number(p.parent)]
         },
-        user: (p,args,context,info) => {
+        post_user_id: (p, args, context, info) => {
             return users.find(user => user.id === Number(p.user_id))
         }
     }

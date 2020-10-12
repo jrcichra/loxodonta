@@ -9,10 +9,12 @@
     "express": "^4.17.1",
     "graphql": "^15.3.0",
     "graphql-tools": "^6.2.4",
-    "knex": "^0.21.6"
+    "knex": "^0.21.6",
+    "moment": "^2.29.1",
+    "mysql": "^2.18.1"
   },
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "DEBUG=knex:query nodemon server.js",
     "start": "node server.js"
   },
   "devDependencies": {
