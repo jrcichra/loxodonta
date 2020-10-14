@@ -9,6 +9,7 @@
     "start": "nuxt start"
   },
   "dependencies": {
+    "@nuxtjs/apollo": "^4.0.1-rc.3",
     "@nuxtjs/axios": "^5.12.2",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.17.3",

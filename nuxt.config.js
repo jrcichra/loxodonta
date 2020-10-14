@@ -1,5 +1,5 @@
 export default {
-    modules: ['bootstrap-vue/nuxt', '@nuxtjs/axios', 'moment'],
+    modules: ['bootstrap-vue/nuxt', '@nuxtjs/axios', 'moment', '@nuxtjs/apollo',],
     components: true,
     moment: {
         timezone: true
@@ -16,6 +16,13 @@ export default {
             regular: true,
         }
     },
+    apollo: {
+        clientConfigs: {
+            default: {
+                httpEndpoint: 'http://localhost:3001',
+            }
+        }
+    }
     // router: {
     //     base: '/dist/'
     // }
