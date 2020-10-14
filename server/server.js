@@ -9,7 +9,7 @@ const Knex = require("knex");
 
 const client = Knex({
     client: "mysql", connection: {
-        host: "smarty4", password: "test", user: "pi", database: "loxodonta",
+        host: "smarty4.pk5001z", password: "test", user: "pi", database: "loxodonta",
         typeCast: function (field, next) {
             if (field.type === 'TIMESTAMP') {
                 var value = field.string();
@@ -39,13 +39,13 @@ const typeDefs = `
         user_bio: String, 
         user_status: String, 
         user_avatar: String, 
-        user_posts: [Post],
+        user_posts(from: Int, to: Int, top: Int): [Post],
         user_friends: [User]
     }
     type Post { 
         post_id: ID!, 
         post_created: Float, 
-        post_user_id: User, 
+        post_user: User, 
         post_text: String, 
         post_object_set_id: Float, 
         post_edited: Float, 
@@ -66,19 +66,29 @@ const resolvers = {
             } else if (args.username) {
                 return client.from("users").where({ username: Number(args.username) }).first();
             } else {
-                return client.from("users").orderBy("user_id");
+                return client.from("users").orderBy("user_created", 'desc');
             }
         },
         post: (parent, args, context, info) => {
             return client.from("posts").where({ post_id: Number(args.id) }).first();
         },
-        posts: () => client.from("posts").orderBy("post_id"),
-        users: () => client.from("users").orderBy("user_id"),
+        posts: () => client.from("posts").orderBy("post_created", 'desc'),
+        users: () => client.from("users").orderBy("user_created", 'desc'),
     },
     User: {
         user_posts: (parent, args, context, info) => {
-            console.log(`only getting posts from user ${parent.user_id}`)
-            return client.from("posts").where({ post_user_id: Number(parent.user_id) }).orderBy("post_id")
+            let base = client.from("posts").where({ post_user_id: Number(parent.user_id) });
+            if (args.to && args.from) {
+                return base.andWhereRaw(`unix_timestamp(post_created) between ${args.to} and ${args.from}`).orderBy("post_created", 'desc')
+            } else if (args.to) {
+                return base.andWhereRaw(`unix_timestamp(post_created) <= ${args.to}`).orderBy("post_created", 'desc')
+            } else if (args.from) {
+                return base.andWhereRaw(`unix_timestamp(post_created) >= ${args.from}`).orderBy("post_created", 'desc')
+            } else if (args.top) {
+                return base.orderBy("post_created", 'desc').limit(args.top)
+            } else {
+                return base.orderBy("post_created", 'desc')
+            }
         },
         // friends: (parent, args, context, info) => {
         //     return users.filter(user => )
@@ -88,8 +98,8 @@ const resolvers = {
         post_parent: (p, args, context, info) => {
             return posts[Number(p.parent)]
         },
-        post_user_id: (p, args, context, info) => {
-            return users.find(user => user.id === Number(p.user_id))
+        post_user: (parent, args, context, info) => {
+            return client.from("users").where({ user_id: Number(parent.post_user_id) }).first();
         }
     }
 };
