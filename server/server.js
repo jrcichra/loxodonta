@@ -90,9 +90,9 @@ const resolvers = {
                 return base.orderBy("post_created", 'desc')
             }
         },
-        // friends: (parent, args, context, info) => {
-        //     return users.filter(user => )
-        // }
+        user_friends: (parent, args, context, info) => {
+            return client.select('u2.*').from({ "u": 'users' }).leftJoin({ "f": 'friends' }, 'u.user_id', '=', 'f.user_id').leftJoin({ "u2": 'users' }, 'u2.user_id', '=', 'f.user_friend_id').where({ 'u.user_id': Number(parent.user_id) })
+        }
     },
     Post: {
         post_parent: (p, args, context, info) => {
