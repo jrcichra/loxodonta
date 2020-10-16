@@ -47,12 +47,22 @@ const typeDefs = `
         post_created: Float, 
         post_user: User, 
         post_text: String, 
-        post_object_set_id: Float, 
+        post_object_set: ObjectSet, 
         post_edited: Float, 
         post_views: Float, 
         post_upvotes: Float, 
         post_downvotes: Float, 
         post_parent: Post 
+    }
+    type Object {
+        object_id: ID!,
+        object_url: String,
+        object_created: Float
+    }
+    type ObjectSet {
+        object_set_id: ID!,
+        object: Object,
+        object_set_order: Int
     }
 `;
 
