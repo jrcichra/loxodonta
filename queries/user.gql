@@ -1,0 +1,49 @@
+query user($id: ID!) { 
+  user(id: $id) {
+    user_created
+    user_name
+    user_bio
+    user_status
+    user_avatar {
+      object_url
+      object_created
+    }
+    user_posts {
+      post_created
+      post_text
+      post_object_set {
+        object_set_id
+        object {
+          object_url
+          object_created
+          object_order
+        }
+      }
+      post_edited
+      post_views
+      post_upvotes
+      post_downvotes
+      post_user {
+        user_created
+        user_name
+        user_bio
+        user_status
+        user_avatar {
+          object_id
+          object_url
+          object_created
+        }
+      }
+    }
+    user_friends {
+      user_created
+      user_name
+      user_bio
+      user_status
+      user_avatar {
+        object_url
+        object_created
+      }
+    }
+  }
+}

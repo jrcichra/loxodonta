@@ -1,0 +1,21 @@
+query feed($id: ID!, $top: Int!) { 
+  feed(id: $id,top:$top) {
+    post_created
+    post_text
+    post_edited
+    post_views
+    post_upvotes
+    post_downvotes
+    post_user {
+      user_created
+      user_name
+      user_bio
+      user_status
+      user_avatar {
+        object_url
+        object_created
+        object_order
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@
     <b-row>
       <b-col cols="3"> </b-col>
       <b-col cols="6">
-        <Feed />
+        <Feed :data="feed" />
       </b-col>
       <b-col cols="1"> </b-col>
       <b-col cols="2">
@@ -14,8 +14,19 @@
 </template>
 
 <script>
+import feed from "~/queries/feed";
+
 export default {
   name: "App",
+  apollo: {
+    feed: {
+      query: feed,
+      prefetch: true,
+      variables() {
+        return { id: 1, top: 20 };
+      },
+    },
+  },
 };
 </script>
 

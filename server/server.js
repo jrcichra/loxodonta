@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
 const moment = require('moment');
+const cors = require('cors');
 
 // Database
 const Knex = require("knex");
@@ -30,7 +31,8 @@ const typeDefs = `
       users: [User], 
       user(id: ID, username: String): User, 
       posts: [Post], 
-      post(id: ID!): Post 
+      post(id: ID!): Post,
+      feed(id: ID!,top: Int) : [Post],
     }
     type User  { 
         user_id: ID!, 
@@ -84,17 +86,24 @@ const resolvers = {
         },
         posts: () => client.from("posts").orderBy("post_created", 'desc'),
         users: () => client.from("users").orderBy("user_created", 'desc'),
+        feed: (parent, args, context, info) => {
+            let base = client.select('p.*').from({ "u": 'users' }).leftJoin({ "f": 'friends' }, 'u.user_id', '=', 'f.user_id').leftJoin({ "u2": 'users' }, 'u2.user_id', '=', 'f.user_friend_id').leftJoin({ 'p': 'posts' }, 'p.post_user_id', '=', 'u2.user_id').where({ 'u.user_id': Number(args.id) }).orderBy("post_created", 'desc')
+            if (args.top !== undefined) {
+                return base.limit(args.top)
+            }
+            return base;
+        },
     },
     User: {
         user_posts: (parent, args, context, info) => {
             let base = client.from("posts").where({ post_user_id: Number(parent.user_id) });
             if (args.to && args.from) {
                 return base.andWhereRaw(`unix_timestamp(post_created) between ${args.to} and ${args.from}`).orderBy("post_created", 'desc')
-            } else if (args.to) {
+            } else if (args.to !== undefined) {
                 return base.andWhereRaw(`unix_timestamp(post_created) <= ${args.to}`).orderBy("post_created", 'desc')
-            } else if (args.from) {
+            } else if (args.from !== undefined) {
                 return base.andWhereRaw(`unix_timestamp(post_created) >= ${args.from}`).orderBy("post_created", 'desc')
-            } else if (args.top) {
+            } else if (args.top !== undefined) {
                 return base.orderBy("post_created", 'desc').limit(args.top)
             } else {
                 return base.orderBy("post_created", 'desc')
@@ -109,7 +118,7 @@ const resolvers = {
     },
     Post: {
         post_parent: (p, args, context, info) => {
-            return posts[Number(p.parent)]
+            return client.from("posts").where({ post_id: Number(p.post_user_id) }).first();
         },
         post_user: (parent, args, context, info) => {
             return client.from("users").where({ user_id: Number(parent.post_user_id) }).first();
@@ -133,6 +142,8 @@ const schema = makeExecutableSchema({
 
 // Initialize the app
 const app = express();
+//cors
+app.use(cors());
 
 // The GraphQL endpoint
 app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
