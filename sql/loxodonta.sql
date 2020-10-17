@@ -17,13 +17,13 @@ use loxodonta;
 create table objects (
 	object_id bigint primary key auto_increment,
 	object_url varchar(1024) not null,
-	object_created timestamp default current_timestamp()
-);
+	object_created timestamp default current_timestamp(),
+	object_order bigint not null default 0
+	);
 
 create table object_sets (
 	object_set_id bigint not null,
 	object_id bigint not null,
-	object_set_order bigint not null,
 	foreign key (object_id) references objects(object_id)
 );
 
@@ -103,12 +103,13 @@ create table posts (
 ## dummy data
 insert into statuses (status_id ,status_name) values (1,'offline');
 insert into statuses (status_id ,status_name) values (2,'online');
-insert into users (user_id ,user_name,user_status_id) values (1,'justin',1);
+insert into objects (object_id ,object_url) values (4,'http://example.com/avatar.jpg');
+insert into users (user_id ,user_name,user_status_id,user_avatar_object_id) values (1,'justin',1,4);
 insert into users (user_id, user_name,user_status_id) values (2,'tim',2);
 insert into objects (object_id ,object_url) values (1,'http://example.com/1.jpg');
 insert into objects (object_id ,object_url) values (2,'http://example.com/2.jpg');
 insert into objects (object_id ,object_url) values (3,'http://example.com/3.jpg');
-insert into object_sets (object_set_id,object_id,object_set_order) values (1,1,0);
+insert into object_sets (object_set_id,object_id) values (1,1);
 insert into posts (post_user_id,post_text,post_object_set_id, post_views,post_upvotes,post_downvotes) 
    values (1,'This is a post by justin', 1,40,23,45);
 insert into posts (post_user_id,post_text,post_object_set_id, post_views,post_upvotes,post_downvotes) 

@@ -38,7 +38,7 @@ const typeDefs = `
         user_name: String, 
         user_bio: String, 
         user_status: String, 
-        user_avatar: String, 
+        user_avatar: Object, 
         user_posts(from: Int, to: Int, top: Int): [Post],
         user_friends: [User]
     }
@@ -57,12 +57,12 @@ const typeDefs = `
     type Object {
         object_id: ID!,
         object_url: String,
-        object_created: Float
+        object_created: Float,
+        object_order: Int
     }
     type ObjectSet {
         object_set_id: ID!,
-        object: Object,
-        object_set_order: Int
+        object: Object
     }
 `;
 
@@ -102,6 +102,9 @@ const resolvers = {
         },
         user_friends: (parent, args, context, info) => {
             return client.select('u2.*').from({ "u": 'users' }).leftJoin({ "f": 'friends' }, 'u.user_id', '=', 'f.user_id').leftJoin({ "u2": 'users' }, 'u2.user_id', '=', 'f.user_friend_id').where({ 'u.user_id': Number(parent.user_id) })
+        },
+        user_avatar: (parent, args, context, info) => {
+            return client.select('o.*').from({ 'o': 'objects' }).join({ 'u': 'users' }, 'o.object_id', '=', 'u.user_avatar_object_id').where({ 'u.user_id': Number(parent.user_id) }).first()
         }
     },
     Post: {
@@ -110,6 +113,14 @@ const resolvers = {
         },
         post_user: (parent, args, context, info) => {
             return client.from("users").where({ user_id: Number(parent.post_user_id) }).first();
+        },
+        post_object_set: (parent, args, context, info) => {
+            return client.select('os.*').from({ 'os': 'object_sets' }).join({ 'p': 'posts' }, 'p.post_object_set_id', '=', 'os.object_set_id').where({ 'p.post_id': Number(parent.post_id) }).first();
+        }
+    },
+    ObjectSet: {
+        object: (parent, args, context, info) => {
+            return client.select('o.*').from({ 'o': 'objects' }).where({ 'o.object_id': Number(parent.object_id) }).first();
         }
     }
 };
