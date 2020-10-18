@@ -3,11 +3,11 @@
     <b-row>
       <b-col cols="3"> </b-col>
       <b-col cols="6">
-        <Feed :data="feed" />
+        <Feed :feed="feed" />
       </b-col>
       <b-col cols="1"> </b-col>
       <b-col cols="2">
-        <FriendList />
+        <FriendList :friends="real_friends" />
       </b-col>
     </b-row>
   </b-container>
@@ -15,6 +15,7 @@
 
 <script>
 import feed from "~/queries/feed";
+import friends from "~/queries/friends";
 
 export default {
   name: "App",
@@ -25,6 +26,21 @@ export default {
       variables() {
         return { id: 1, top: 20 };
       },
+    },
+    user: {
+      query: friends,
+      prefetch: true,
+      variables() {
+        return { id: 1 };
+      },
+    },
+  },
+  computed: {
+    real_friends: function () {
+      if (this.user === undefined) {
+        return [];
+      }
+      return this.user.user_friends;
     },
   },
 };

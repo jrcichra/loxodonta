@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <b-row v-for="row in data" :key="row.id">
+    <b-row v-for="row in feed" :key="row.id">
       <b-col class="feed shadow-lg">
         <Card
           :username="row.post_user.user_name"
@@ -22,7 +22,7 @@ export default {
   name: "Feed",
   props: {
     userid: Number,
-    data: Array,
+    feed: Array,
   },
   data() {
     return {};

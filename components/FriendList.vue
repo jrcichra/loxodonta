@@ -1,15 +1,17 @@
 <template>
   <b-container id="friendlist" class="shadow-lg" fluid>
     <b-row>
-      <b-col> <p>Friends</p></b-col>
+      <b-col>
+        <p>Friends ({{ friends.length }})</p>
+      </b-col>
     </b-row>
     <b-row v-for="friend in friends" :key="friend.id">
       <b-col>
         <SmallFriendCard
-          :username="friend.username"
-          :avatar="friend.avatar"
-          :status="friend.status"
-          :userid="friend.userid"
+          :username="friend.user_name"
+          :avatar="getAvatar(friend)"
+          :status="friend.user_status"
+          :userid="friend.user_id"
         />
       </b-col>
     </b-row>
@@ -22,22 +24,19 @@
 export default {
   name: "FriendList",
   data() {
-    return {
-      friends: [
-        {
-          username: "Justin",
-          avatar: "http://localhost:3000/_nuxt/assets/logo.svg",
-          status: "online",
-          userid: 0,
-        },
-        {
-          username: "Tim",
-          avatar: "http://localhost:3000/_nuxt/assets/logo.svg",
-          status: "offline",
-          userid: 1,
-        },
-      ],
-    };
+    return {};
+  },
+  props: {
+    friends: Array,
+  },
+  methods: {
+    getAvatar: function (friend) {
+      if (friend.user_avatar !== null) {
+        return friend.user_avatar.object_url;
+      } else {
+        return "http://localhost:3000/_nuxt/assets/logo.svg";
+      }
+    },
   },
 };
 </script>

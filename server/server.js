@@ -114,7 +114,10 @@ const resolvers = {
         },
         user_avatar: (parent, args, context, info) => {
             return client.select('o.*').from({ 'o': 'objects' }).join({ 'u': 'users' }, 'o.object_id', '=', 'u.user_avatar_object_id').where({ 'u.user_id': Number(parent.user_id) }).first()
-        }
+        },
+        user_status: (parent, args, context, info) => {
+            return client.select('status_name').from({ 's': 'statuses' }).join({ 'u': 'users' }, 's.status_id', '=', 'u.user_status_id').where({ 'u.user_id': Number(parent.user_id) }).first().pluck('status_name').then((statuses) => { return statuses[0] })
+        },
     },
     Post: {
         post_parent: (p, args, context, info) => {

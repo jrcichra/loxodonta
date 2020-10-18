@@ -7,14 +7,10 @@ query feed($id: ID!, $top: Int!) {
     post_upvotes
     post_downvotes
     post_user {
-      user_created
       user_name
-      user_bio
       user_status
       user_avatar {
         object_url
-        object_created
-        object_order
       }
     }
   }
