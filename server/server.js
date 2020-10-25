@@ -34,6 +34,9 @@ const typeDefs = `
       post(id: ID!): Post,
       feed(id: ID!,top: Int) : [Post],
     }
+    type Mutation {
+        newPost(post_text: String!, post_user_id: Int!, post_parent: Int): Post!
+    }
     type User  { 
         user_id: ID!, 
         user_created: Float, 
@@ -93,6 +96,14 @@ const resolvers = {
             }
             return base;
         },
+    },
+    Mutation: {
+        newPost: async (_, { post_user_id, post_text, post_parent }, { dataSources }) => {
+            let id = await client.into("posts").insert({ post_text, post_user_id, post_parent });
+            console.log(`newPostID=${id}`);
+            // Not sure why this is returning all nulls?
+            return client.from("posts").where({ post_id: id });
+        }
     },
     User: {
         user_posts: (parent, args, context, info) => {
