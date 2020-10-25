@@ -22,14 +22,14 @@ export default {
   apollo: {
     feed: {
       query: feed,
-      prefetch: true,
+      prefetch: false,
       variables() {
         return { id: 1, top: 20 };
       },
     },
     user: {
       query: friends,
-      prefetch: true,
+      prefetch: false,
       variables() {
         return { id: 1 };
       },

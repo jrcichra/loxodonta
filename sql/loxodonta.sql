@@ -105,7 +105,7 @@ insert into statuses (status_id ,status_name) values (1,'offline');
 insert into statuses (status_id ,status_name) values (2,'online');
 insert into objects (object_id ,object_url) values (4,'http://example.com/avatar.jpg');
 insert into users (user_id ,user_name,user_status_id,user_avatar_object_id) values (1,'justin',1,4);
-insert into users (user_id, user_name,user_status_id) values (2,'tim',2);
+insert into users (user_id, user_name,user_status_id,user_bio) values (2,'tim',2,'I like elephants');
 insert into objects (object_id ,object_url) values (1,'http://example.com/1.jpg');
 insert into objects (object_id ,object_url) values (2,'http://example.com/2.jpg');
 insert into objects (object_id ,object_url) values (3,'http://example.com/3.jpg');

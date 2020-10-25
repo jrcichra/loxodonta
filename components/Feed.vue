@@ -6,11 +6,7 @@
           :username="row.post_user.user_name"
           :content="row.post_text"
           :time="row.post_created"
-          :avatar="
-            row.post_user.user_avatar !== null
-              ? row.post_user.user_avatar.object_url
-              : 'http://localhost:3000/_nuxt/assets/logo.svg'
-          "
+          :avatar="getAvatar(row.post_user)"
         />
       </b-col>
     </b-row>
@@ -21,13 +17,21 @@ import moment from "moment";
 export default {
   name: "Feed",
   props: {
-    userid: Number,
+    userid: String,
     feed: Array,
   },
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    getAvatar: function (friend) {
+      if (friend.user_avatar !== null) {
+        return friend.user_avatar.object_url;
+      } else {
+        return "http://localhost:3000/_nuxt/assets/logo.svg";
+      }
+    },
+  },
 };
 </script>
 <style scoped>

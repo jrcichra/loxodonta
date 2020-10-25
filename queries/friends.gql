@@ -1,6 +1,7 @@
 query user($id: ID!) {
   user(id: $id) {
     user_friends {
+      user_id
       user_name
       user_status
       user_avatar {

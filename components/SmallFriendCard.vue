@@ -22,7 +22,7 @@ export default {
     username: String,
     avatar: String,
     status: String,
-    userid: Number,
+    userid: String,
   },
   methods: {
     getLocalTime(time) {

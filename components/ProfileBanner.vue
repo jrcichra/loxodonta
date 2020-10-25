@@ -28,7 +28,7 @@ export default {
     username: String,
     bio: String,
     avatar: String,
-    userid: Number,
+    userid: String,
   },
 };
 </script>

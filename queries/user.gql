@@ -1,5 +1,6 @@
 query user($id: ID!) { 
   user(id: $id) {
+    user_id
     user_created
     user_name
     user_bio
