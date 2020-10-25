@@ -2,7 +2,9 @@
   <b-container id="card" class="shadow" fluid>
     <b-row>
       <b-col cols="1" id="avatarcol">
-        <img height="40rem" :src="avatar" alt="" />
+        <nuxt-link class="nolink" :to="`/users/${user_id}`">
+          <img height="40rem" :src="avatar" alt="" />
+        </nuxt-link>
       </b-col>
       <b-col cols="2" id="infocol">
         <p id="username">{{ username }}</p>
@@ -22,6 +24,7 @@ import moment from "moment";
 export default {
   name: "Card",
   props: {
+    user_id: String,
     username: String,
     content: String,
     time: Number,

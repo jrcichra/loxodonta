@@ -3,6 +3,7 @@
     <b-row v-for="row in feed" :key="row.id">
       <b-col class="feed shadow-lg">
         <Card
+          :user_id="row.post_user.user_id"
           :username="row.post_user.user_name"
           :content="row.post_text"
           :time="row.post_created"
