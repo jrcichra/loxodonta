@@ -102,7 +102,7 @@ const resolvers = {
             let id = await client.into("posts").insert({ post_text, post_user_id, post_parent });
             console.log(`newPostID=${id}`);
             // Not sure why this is returning all nulls?
-            return client.from("posts").where({ post_id: id });
+            return client.from("posts").where({ post_id: id }).first();
         }
     },
     User: {
