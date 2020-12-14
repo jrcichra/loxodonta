@@ -3,6 +3,7 @@
     <b-row>
       <b-col cols="3"> </b-col>
       <b-col cols="6">
+        <PostForm :user="user" />
         <Feed :feed="feed" />
       </b-col>
       <b-col cols="1"> </b-col>
@@ -16,7 +17,7 @@
 <script>
 import feed from "~/queries/feed";
 import friends from "~/queries/friends";
-
+import user from "~/queries/user";
 export default {
   name: "App",
   apollo: {
@@ -27,8 +28,16 @@ export default {
         return { id: 1, top: 20 };
       },
     },
-    user: {
+    friends: {
       query: friends,
+      prefetch: false,
+      variables() {
+        return { id: 1 };
+      },
+      update: (data) => data.user,
+    },
+    user: {
+      query: user,
       prefetch: false,
       variables() {
         return { id: 1 };
@@ -37,10 +46,10 @@ export default {
   },
   computed: {
     real_friends: function () {
-      if (this.user === undefined) {
+      if (this.friends === undefined) {
         return [];
       }
-      return this.user.user_friends;
+      return this.friends.user_friends;
     },
   },
 };

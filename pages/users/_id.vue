@@ -5,7 +5,7 @@
       <b-col cols="">
         <ProfileBanner
           v-if="user !== undefined"
-          :avatar="getAvatar(user)"
+          :avatar="user.user_avatar.object_url"
           :username="user.user_name"
           :bio="user.user_bio"
           :userid="user.user_id"
@@ -35,17 +35,7 @@ export default {
   data() {
     return {};
   },
-  methods: {
-    getAvatar: function (friend) {
-      console.log("this is the place");
-      console.log(friend);
-      if (friend !== undefined && friend.user_avatar !== null) {
-        return friend.user_avatar.object_url;
-      } else {
-        return "http://localhost:3000/_nuxt/assets/logo.svg";
-      }
-    },
-  },
+  methods: {},
 };
 </script>
 

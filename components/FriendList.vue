@@ -8,8 +8,9 @@
     <b-row v-for="friend in friends" :key="friend.id">
       <b-col>
         <SmallFriendCard
+          v-if="friend.user_avatar"
           :username="friend.user_name"
-          :avatar="getAvatar(friend)"
+          :avatar="friend.user_avatar.object_url"
           :status="friend.user_status"
           :userid="friend.user_id"
         />
@@ -29,15 +30,7 @@ export default {
   props: {
     friends: Array,
   },
-  methods: {
-    getAvatar: function (friend) {
-      if (friend.user_avatar !== null) {
-        return friend.user_avatar.object_url;
-      } else {
-        return "http://localhost:3000/_nuxt/assets/logo.svg";
-      }
-    },
-  },
+  methods: {},
 };
 </script>
 <style scoped>

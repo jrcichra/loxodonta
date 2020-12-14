@@ -3,11 +3,12 @@
     <b-row v-for="row in feed" :key="row.id">
       <b-col class="feed shadow-lg">
         <Card
+          v-if="row.post_user && row.post_user.user_avatar"
           :user_id="row.post_user.user_id"
           :username="row.post_user.user_name"
           :content="row.post_text"
           :time="row.post_created"
-          :avatar="getAvatar(row.post_user)"
+          :avatar="row.post_user.user_avatar.object_url"
         />
       </b-col>
     </b-row>
@@ -24,15 +25,7 @@ export default {
   data() {
     return {};
   },
-  methods: {
-    getAvatar: function (friend) {
-      if (friend.user_avatar !== null) {
-        return friend.user_avatar.object_url;
-      } else {
-        return "http://localhost:3000/_nuxt/assets/logo.svg";
-      }
-    },
-  },
+  methods: {},
 };
 </script>
 <style scoped>

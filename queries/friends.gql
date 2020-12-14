@@ -1,4 +1,4 @@
-query user($id: ID!) {
+query friends($id: ID!) {
   user(id: $id) {
     user_friends {
       user_id
