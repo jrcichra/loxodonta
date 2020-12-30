@@ -29,6 +29,12 @@
         />
       </b-col>
     </b-row>
+    <b-row>
+      <b-col cols="11"></b-col>
+      <b-col>
+        <b-button class="postbutton">Post</b-button>
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 <script>
@@ -51,9 +57,6 @@ export default {
 #username {
   margin-bottom: 0;
 }
-#time {
-  font-size: 0.7rem;
-}
 #infocol {
   padding: 0%;
   max-width: 14rem;
@@ -64,11 +67,16 @@ export default {
 }
 #content {
   overflow-wrap: break-word;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .postform {
   background-color: rgb(26, 26, 26);
   color: rgb(190, 182, 182);
   margin-top: 1rem;
+}
+.postbutton {
+  margin-bottom: 1rem;
 }
 </style>
