@@ -164,10 +164,8 @@ jobs:
           docker-compose build
       - name: Run
         run: |
-          docker-compose run -d
+          docker-compose up -d
           sleep 20
       - name: Test
         run: |
-          docker-compose run -d
-          sleep 20
           curl http://localhost:3000
