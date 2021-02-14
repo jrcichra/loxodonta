@@ -2,6 +2,7 @@
   <b-container fluid class="banner">
     <b-row align-v="end">
       <b-col>
+        <img class="logo" alt="Vue logo" src="../assets/logo.svg" />
         <h1 id="tagline">Self-hosted, private, social networking</h1>
         <h3>First time here? <nuxt-link to="/signup">Sign up</nuxt-link></h3>
         <h3>
@@ -20,6 +21,8 @@ export default {
 <style scoped>
 .banner {
   text-align: center;
-  margin-top: 23rem;
+}
+.logo {
+  width: 30%;
 }
 </style>
