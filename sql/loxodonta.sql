@@ -1,18 +1,12 @@
--- drop table object_sets;
--- drop table friends;
--- drop table objects;
--- drop table users;
--- 
--- drop table statuses;
--- drop table status_history;
--- drop trigger status_history_initial_audit;
--- drop trigger status_history_audit;
--- 
--- drop table posts;
-
-drop database loxodonta;
+drop database if exists loxodonta;
 create database loxodonta;
+
 use loxodonta;
+
+drop user if exists 'api'@'%';
+create user 'api'@'%' identified by 'changeme';
+grant all on loxodonta.* to 'api'@'%';
+flush privileges;
 
 create table objects (
 	object_id bigint primary key auto_increment,
@@ -55,25 +49,6 @@ create table status_history (
 	foreign key (user_status_id) references statuses(status_id)
 );
 
--- 
--- DELIMITER $$
--- create trigger status_history_initial_audit
--- before insert
--- on users for each row
--- BEGIN
--- insert into status_history (user_id,user_status_id) values (new.user_id, new.user_status_id);
--- END; $$
--- 
--- DELIMITER $$
--- create trigger status_history_audit
--- before update
--- on users for each row
--- BEGIN
--- if old.user_status_id <> new.user_status_id then
--- insert into status_history (user_id,user_status_id) values (old.user_id, old.user_status_id);
--- end if;
--- END; $$
-
 create table friends (
 	user_id bigint not null,
 	user_friend_id bigint not null,
@@ -95,7 +70,6 @@ create table posts (
 	post_parent bigint,
 	foreign key (post_parent) references posts(post_id),
 	foreign key (post_user_id) references users(user_id)
-	### doesn't work - foreign key (post_object_set_id) references object_sets(object_set_id)
 );
 
 
@@ -104,11 +78,11 @@ create table posts (
 insert into statuses (status_id ,status_name) values (1,'offline');
 insert into statuses (status_id ,status_name) values (2,'online');
 insert into objects (object_id ,object_url) values (4,'https://thispersondoesnotexist.com/image');
-insert into users (user_id ,user_name,user_status_id,user_avatar_object_id) values (1,'justin',1,4);
-insert into users (user_id, user_name,user_status_id,user_bio,user_avatar_object_id) values (2,'tim',2,'I like elephants',3);
 insert into objects (object_id ,object_url) values (1,'https://thispersondoesnotexist.com/image');
 insert into objects (object_id ,object_url) values (2,'https://thispersondoesnotexist.com/image');
 insert into objects (object_id ,object_url) values (3,'https://thispersondoesnotexist.com/image');
+insert into users (user_id ,user_name,user_status_id,user_bio,user_avatar_object_id) values (1,'justin',1,'This is justins bio',4);
+insert into users (user_id, user_name,user_status_id,user_bio,user_avatar_object_id) values (2,'tim',2,'I like elephants',3);
 insert into object_sets (object_set_id,object_id) values (1,1);
 insert into posts (post_user_id,post_text,post_object_set_id, post_views,post_upvotes,post_downvotes) 
    values (1,'This is a post by justin', 1,40,23,45);
@@ -117,6 +91,3 @@ insert into posts (post_user_id,post_text,post_object_set_id, post_views,post_up
 insert into posts (post_user_id,post_text,post_object_set_id, post_views,post_upvotes,post_downvotes,post_parent) 
    values (1,'This is a comment by justin on tims post', 1,40,23,45,2);
 insert into friends (user_id,user_friend_id) values (1,2);
-
-
-show full processlist;

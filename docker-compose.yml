@@ -1,0 +1,37 @@
+version: "3"
+services:
+  mariadb:
+    image: ghcr.io/linuxserver/mariadb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - $PWD/mariadb_data:/config
+      - $PWD/sql:/config/initdb.d/
+  web:
+    hostname: web
+    build: .
+    image: jrcichra/loxodonta
+    volumes:
+      - ${PWD}/components:/app/components
+      - ${PWD}/pages:/app/pages
+      - ${PWD}/assets:/app/assets
+      - ${PWD}/layouts:/app/layouts
+      - ${PWD}/plugins:/app/plugins
+      - ${PWD}/queries:/app/queries
+      - ${PWD}/nuxt.config.js:/app/nuxt.config.js
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
+  api:
+    hostname: api
+    build: ./server
+    image: jrcichra/loxodonta-server
+    volumes:
+      - ${PWD}/server/server.js:/app/server.js
+    ports:
+      - 3001:3001
+    depends_on:
+      - mariadb

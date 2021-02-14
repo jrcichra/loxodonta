@@ -3,6 +3,7 @@ A social media platform for privacy-focused mammals
 
 ## Status
 + Still in early development - not ready for alpha use yet
++ Get up and running with `docker-compose build && docker-compose up -d` and visit http://localhost:3000
 
 ## Purpose/Goals
 + Self-hosted social media ( maybe IPFS support at some point?)

@@ -10,7 +10,7 @@ const Knex = require("knex");
 
 const client = Knex({
     client: "mysql", connection: {
-        host: "smarty4.pk5001z", password: "test", user: "pi", database: "loxodonta",
+        host: "mariadb", password: "changeme", user: "api", database: "loxodonta",
         typeCast: function (field, next) {
             if (field.type === 'TIMESTAMP') {
                 var value = field.string();
@@ -168,5 +168,7 @@ app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 // Start the server
 app.listen(3001, () => {
-    console.log('Go to http://localhost:3001/graphiql to run queries!');
+    var os = require("os");
+    var hostname = os.hostname();
+    console.log(`Go to http://${hostname}:3001/graphiql to run queries!`);
 });

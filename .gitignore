@@ -23,3 +23,6 @@ pnpm-debug.log*
 *.sw?
 .nuxt
 server/server
+
+# Loxodonta specific
+mariadb_data
