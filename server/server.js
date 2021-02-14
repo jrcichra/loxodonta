@@ -99,6 +99,7 @@ const resolvers = {
     },
     Mutation: {
         newPost: async (_, { post_user_id, post_text, post_parent }, { dataSources }) => {
+            console.log("Made it into newPost");
             let id = await client.into("posts").insert({ post_text, post_user_id, post_parent });
             console.log(`newPostID=${id}`);
             // Not sure why this is returning all nulls?

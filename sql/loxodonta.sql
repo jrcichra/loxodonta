@@ -118,3 +118,5 @@ insert into posts (post_user_id,post_text,post_object_set_id, post_views,post_up
    values (1,'This is a comment by justin on tims post', 1,40,23,45,2);
 insert into friends (user_id,user_friend_id) values (1,2);
 
+
+show full processlist;

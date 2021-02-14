@@ -32,13 +32,14 @@
     <b-row>
       <b-col cols="11"></b-col>
       <b-col>
-        <b-button class="postbutton">Post</b-button>
+        <b-button @click="newPost" class="postbutton">Post</b-button>
       </b-col>
     </b-row>
   </b-container>
 </template>
 <script>
-import moment from "moment";
+// import moment from "moment";
+import newpost from "~/queries/newpost";
 export default {
   name: "PostForm",
   props: {
@@ -50,6 +51,29 @@ export default {
       username: "Justin",
       placeholder: "What's on your mind?",
     };
+  },
+  methods: {
+    async newPost() {
+      if (this.content) {
+        console.log(`new post content: ${this.content}`);
+        // post new content to database for user
+        try {
+          await this.$apollo
+            .mutate({
+              mutation: newpost,
+              variables: {
+                post_text: this.content,
+                post_user_id: Number(this.user.user_id),
+              },
+            })
+            .then(({ data }) =>
+              console.log(`got data back from newPost() ${data}`)
+            );
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    },
   },
 };
 </script>

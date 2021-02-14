@@ -1,0 +1,5 @@
+mutation newPost($post_text: String!, $post_user_id: Int!, $post_parent: Int) {
+    newPost(post_text: $post_text, post_user_id: $post_user_id, post_parent: $post_parent) {
+        post_id
+    }
+}
