@@ -147,3 +147,27 @@ jobs:
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Repo metadata
+        id: repo
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const repo = await github.repos.get(context.repo)
+            return repo.data
+      - name: Build
+        run: |
+          docker-compose build
+      - name: Run
+        run: |
+          docker-compose run -d
+          sleep 20
+      - name: Test
+        run: |
+          docker-compose run -d
+          sleep 20
+          curl http://localhost:3000
