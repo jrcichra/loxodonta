@@ -10,7 +10,11 @@
           :bio="user.user_bio"
           :userid="user.user_id"
         />
-        <Feed v-if="user !== undefined" :userid="user.user_id" />
+        <Feed
+          v-if="user !== undefined"
+          :userid="user.user_id"
+          :feed="user.user_posts"
+        />
       </b-col>
       <b-col cols="1"> </b-col>
       <b-col cols="2"> </b-col>
