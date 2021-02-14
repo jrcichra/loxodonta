@@ -5,10 +5,10 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - MYSQL_ROOT_PASSWORD=changeme
       - TZ=America/New_York
     volumes:
       - $PWD/mariadb_data:/config
+      - $PWD/sql:/config/initdb.d/
   web:
     hostname: web
     build: .
@@ -27,10 +27,10 @@ services:
       - api
   api:
     hostname: api
-    build: ./server
+    build: ./api
     image: jrcichra/loxodonta-server
     # volumes:
-    #   - ${PWD}/server/server.js:/app/server.js
+    #   - ${PWD}/api/server.js:/app/server.js
     ports:
       - 3001:3001
     depends_on:

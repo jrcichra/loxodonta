@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:15-slim
 WORKDIR /app
 COPY nuxt.config.js yarn.lock package.json LICENSE ./
 RUN yarn install

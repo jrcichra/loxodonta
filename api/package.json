@@ -8,9 +8,9 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "graphql": "^15.3.0",
-    "graphql-tools": "^6.2.4",
-    "knex": "^0.21.6",
+    "graphql": "^15.5.0",
+    "graphql-tools": "^7.0.3",
+    "knex": "^0.21.17",
     "moment": "^2.29.1",
     "mysql": "^2.18.1"
   },
@@ -19,6 +19,6 @@
     "start": "node server.js"
   },
   "devDependencies": {
-    "nodemon": "^2.0.5"
+    "nodemon": "^2.0.7"
   }
 }
