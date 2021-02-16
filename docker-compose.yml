@@ -25,6 +25,11 @@ services:
       - 3000:3000
     depends_on:
       - api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
   api:
     hostname: api
     build: ./api
@@ -35,3 +40,19 @@ services:
       - 3001:3001
     depends_on:
       - mariadb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/graphiql/"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+  minio:
+    hostname: minio
+    image: minio/minio:RELEASE.2021-02-14T04-01-33Z
+    volumes:
+      - ${PWD}/minio_data:/data
+    command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3

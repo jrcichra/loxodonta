@@ -26,3 +26,4 @@ pnpm-debug.log*
 
 # Loxodonta specific
 mariadb_data
+minio_data
