@@ -1,9 +1,10 @@
 export default {
-    modules: ['bootstrap-vue/nuxt', '@nuxtjs/axios', 'moment', '@nuxtjs/apollo',],
+    modules: ['bootstrap-vue/nuxt', '@nuxtjs/axios', 'moment', '@nuxtjs/apollo'],
     components: true,
     moment: {
         timezone: true
-    }, buildModules: [
+    },
+    buildModules: [
         '@nuxtjs/fontawesome',
     ],
     server: {
@@ -22,7 +23,7 @@ export default {
                 httpEndpoint: 'http://localhost:3001/graphql',
             }
         }
-    }
+    },
     // router: {
     //     base: '/dist/'
     // }

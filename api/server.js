@@ -1,9 +1,15 @@
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
 const moment = require('moment');
 const cors = require('cors');
+const minio = require('minio');
+const tmp = require('tmp');
+const fs = require('fs');
+
+const BUCKETNAME = 'loxodonta';
 
 // Database
 const Knex = require("knex");
@@ -171,4 +177,61 @@ app.listen(3001, () => {
     var os = require("os");
     var hostname = os.hostname();
     console.log(`Go to http://${hostname}:3001/graphiql to run queries!`);
+});
+
+// Minio client
+const minioClient = new minio.Client({
+    endPoint: 'minio',
+    port: 9000,
+    useSSL: false,
+    accessKey: process.env.MINIO_ROOT_USER,
+    secretKey: process.env.MINIO_ROOT_PASSWORD,
+});
+
+// Make the bucket if it doesn't already exist
+minioClient.bucketExists(BUCKETNAME, function (err, exists) {
+    if (err) {
+        minioClient.makeBucket(BUCKETNAME, 'us-east-1', function (err) {
+            if (err) {
+                return console.log(err);
+            }
+        });
+    }
+});
+
+// Handle an upload
+app.use(fileUpload());
+app.post('/upload', (req, res) => {
+
+    // Pull out data
+    const fileContent = Buffer.from(req.files.content.data, 'binary');
+    const fileName = req.files.content.name;
+    const mimetype = req.files.content.mimetype;
+
+    const tmpobj = tmp.fileSync();
+
+    fs.writeFile(tmpobj.fd, fileContent, function (err) {
+        if (err) return console.log(err);
+        // Make a bucket
+
+        const metaData = {
+            'Content-Type': mimetype,
+        };
+        // put it in the bucket
+        minioClient.fPutObject(BUCKETNAME, fileName, tmpobj.name, metaData, function (err, etag) {
+            if (err) {
+                console.log(err);
+                res.send({
+                    "response_code": 502,
+                    "response_message": err,
+                });
+            } else {
+                console.log('File uploaded successfully.');
+                res.send({
+                    "response_code": 200,
+                    "response_message": "Success",
+                });
+            }
+        });
+    });
 });
