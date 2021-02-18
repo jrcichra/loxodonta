@@ -12,7 +12,7 @@ services:
   web:
     hostname: web
     build: .
-    image: jrcichra/lo xodonta
+    image: jrcichra/loxodonta
     # volumes:
     # - ${PWD}/components:/app/components
     # - ${PWD}/pages:/app/pages
