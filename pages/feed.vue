@@ -11,14 +11,6 @@
         <FriendList :friends="real_friends" />
       </b-col>
     </b-row>
-    <form
-      action="http://localhost:3001/upload"
-      method="post"
-      encType="multipart/form-data"
-    >
-      <input type="file" name="content" />
-      <input type="submit" />
-    </form>
   </b-container>
 </template>
 

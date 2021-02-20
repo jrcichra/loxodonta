@@ -1,13 +1,11 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
+const { ApolloServer, gql } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
 const moment = require('moment');
 const cors = require('cors');
 const minio = require('minio');
-const tmp = require('tmp');
-const fs = require('fs');
 
 const BUCKETNAME = 'loxodonta';
 
@@ -31,8 +29,28 @@ const client = Knex({
     }
 });
 
+// Minio client
+const minioClient = new minio.Client({
+    endPoint: 'minio',
+    port: 9000,
+    useSSL: false,
+    accessKey: process.env.MINIO_ROOT_USER,
+    secretKey: process.env.MINIO_ROOT_PASSWORD,
+});
+
+// Make the bucket if it doesn't already exist
+minioClient.bucketExists(BUCKETNAME, function (err, exists) {
+    if (!exists) {
+        minioClient.makeBucket(BUCKETNAME, 'us-east-1', function (err) {
+            if (err) {
+                return console.log(err);
+            }
+        });
+    }
+});
+
 // The GraphQL schema in string form
-const typeDefs = `
+const typeDefs = gql`
     type Query { 
       users: [User], 
       user(id: ID, username: String): User, 
@@ -40,8 +58,14 @@ const typeDefs = `
       post(id: ID!): Post,
       feed(id: ID!,top: Int) : [Post],
     }
+    type File {
+        filename: String!
+        mimetype: String!
+        encoding: String!
+    }
     type Mutation {
         newPost(post_text: String!, post_user_id: Int!, post_parent: Int): Post!
+        newFile(file: Upload!): File!
     }
     type User  { 
         user_id: ID!, 
@@ -110,7 +134,32 @@ const resolvers = {
             console.log(`newPostID=${id}`);
             // Not sure why this is returning all nulls?
             return client.from("posts").where({ post_id: id }).first();
-        }
+        },
+        newFile: (parent, args) => {
+            return args.file.then(file => {
+                //Contents of Upload scalar: https://github.com/jaydenseric/graphql-upload#class-graphqlupload
+                //file.createReadStream() is a readable node stream that contains the contents of the uploaded file
+                //node stream api: https://nodejs.org/api/stream.html
+                const stream = file.createReadStream();
+
+                const fileName = file.filename;
+                const mimetype = file.mimetype;
+                const metaData = {
+                    'Content-Type': mimetype,
+                };
+                // put it in the bucket
+                minioClient.putObject(BUCKETNAME, fileName, stream, metaData, function (err, objInfo) {
+                    console.log("shouldn't this run?");
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log('File uploaded successfully.');
+                        console.log(objInfo);
+                    }
+                });
+                return file;
+            });
+        },
     },
     User: {
         user_posts: (parent, args, context, info) => {
@@ -156,7 +205,7 @@ const resolvers = {
 };
 
 // Put together a schema
-const schema = makeExecutableSchema({
+const server = new ApolloServer({
     typeDefs,
     resolvers,
 });
@@ -167,71 +216,11 @@ const app = express();
 app.use(cors());
 
 // The GraphQL endpoint
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
-
-// GraphiQL, a visual editor for queries
-app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+server.applyMiddleware({ app });
 
 // Start the server
 app.listen(3001, () => {
     var os = require("os");
     var hostname = os.hostname();
-    console.log(`Go to http://${hostname}:3001/graphiql to run queries!`);
-});
-
-// Minio client
-const minioClient = new minio.Client({
-    endPoint: 'minio',
-    port: 9000,
-    useSSL: false,
-    accessKey: process.env.MINIO_ROOT_USER,
-    secretKey: process.env.MINIO_ROOT_PASSWORD,
-});
-
-// Make the bucket if it doesn't already exist
-minioClient.bucketExists(BUCKETNAME, function (err, exists) {
-    if (err) {
-        minioClient.makeBucket(BUCKETNAME, 'us-east-1', function (err) {
-            if (err) {
-                return console.log(err);
-            }
-        });
-    }
-});
-
-// Handle an upload
-app.use(fileUpload());
-app.post('/upload', (req, res) => {
-
-    // Pull out data
-    const fileContent = Buffer.from(req.files.content.data, 'binary');
-    const fileName = req.files.content.name;
-    const mimetype = req.files.content.mimetype;
-
-    const tmpobj = tmp.fileSync();
-
-    fs.writeFile(tmpobj.fd, fileContent, function (err) {
-        if (err) return console.log(err);
-        // Make a bucket
-
-        const metaData = {
-            'Content-Type': mimetype,
-        };
-        // put it in the bucket
-        minioClient.fPutObject(BUCKETNAME, fileName, tmpobj.name, metaData, function (err, etag) {
-            if (err) {
-                console.log(err);
-                res.send({
-                    "response_code": 502,
-                    "response_message": err,
-                });
-            } else {
-                console.log('File uploaded successfully.');
-                res.send({
-                    "response_code": 200,
-                    "response_message": "Success",
-                });
-            }
-        });
-    });
+    console.log(`🚀 Go to http://${hostname}:3001${server.graphqlPath} to run queries!`);
 });

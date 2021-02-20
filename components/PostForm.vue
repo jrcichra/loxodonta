@@ -25,14 +25,17 @@
         <b-form-input
           id="content"
           :placeholder="placeholder"
-          v-model="content"
+          v-model="form.text"
         />
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="11"></b-col>
       <b-col>
-        <b-button @click="newPost" class="postbutton">Post</b-button>
+        <b-form inline @submit="newFile">
+          <b-form-file v-model="form.attachments" accept=".jpg, .png, .gif">
+          </b-form-file>
+          <b-button type="submit" class="postbutton">Post</b-button>
+        </b-form>
       </b-col>
     </b-row>
   </b-container>
@@ -40,16 +43,20 @@
 <script>
 // import moment from "moment";
 import newpost from "~/queries/newpost";
+import newfile from "~/queries/newfile";
 export default {
   name: "PostForm",
   props: {
     user: Object,
-    content: String,
   },
   data() {
     return {
       username: "Justin",
       placeholder: "What's on your mind?",
+      form: {
+        text: "",
+        attachments: [],
+      },
     };
   },
   methods: {
@@ -72,6 +79,22 @@ export default {
         } catch (e) {
           console.error(e);
         }
+      }
+    },
+    async newFile(event) {
+      event.preventDefault(); //Don't submit the page
+      console.log(this.form.attachments);
+      try {
+        await this.$apollo
+          .mutate({
+            mutation: newfile,
+            variables: {
+              file: this.form.attachments,
+            },
+          })
+          .then(({ data }) => console.log(data));
+      } catch (e) {
+        console.error(e);
       }
     },
   },
