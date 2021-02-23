@@ -83,18 +83,23 @@ export default {
     },
     async newFile(event) {
       event.preventDefault(); //Don't submit the page
-      console.log(this.form.attachments);
-      try {
-        await this.$apollo
-          .mutate({
-            mutation: newfile,
-            variables: {
-              file: this.form.attachments,
-            },
-          })
-          .then(({ data }) => console.log(data));
-      } catch (e) {
-        console.error(e);
+      var file = this.form.attachments;
+      if (file) {
+        console.log(file);
+        try {
+          await this.$apollo
+            .mutate({
+              mutation: newfile,
+              variables: {
+                file,
+              },
+            })
+            .then(({ data }) => console.log(data));
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        console.error("attachments were not defined but newFile was called");
       }
     },
   },

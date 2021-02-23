@@ -135,30 +135,22 @@ const resolvers = {
             // Not sure why this is returning all nulls?
             return client.from("posts").where({ post_id: id }).first();
         },
-        newFile: (parent, args) => {
-            return args.file.then(file => {
-                //Contents of Upload scalar: https://github.com/jaydenseric/graphql-upload#class-graphqlupload
-                //file.createReadStream() is a readable node stream that contains the contents of the uploaded file
-                //node stream api: https://nodejs.org/api/stream.html
-                const stream = file.createReadStream();
-
-                const fileName = file.filename;
-                const mimetype = file.mimetype;
-                const metaData = {
-                    'Content-Type': mimetype,
-                };
-                // put it in the bucket
-                minioClient.putObject(BUCKETNAME, fileName, stream, metaData, function (err, objInfo) {
-                    console.log("shouldn't this run?");
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log('File uploaded successfully.');
-                        console.log(objInfo);
-                    }
-                });
-                return file;
+        newFile: async (parent, { file }) => {
+            const { stream, filename, mimetype, encoding } = await file;
+            const metaData = {
+                'Content-Type': mimetype,
+            };
+            // put it in the bucket
+            minioClient.putObject(BUCKETNAME, filename, stream, (err, objInfo) => {
+                console.log("shouldn't this run?");
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log('File uploaded successfully.');
+                    console.log(objInfo);
+                }
             });
+            return { filename, mimetype, encoding, url: '' };
         },
     },
     User: {
