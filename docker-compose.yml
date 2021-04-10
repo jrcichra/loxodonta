@@ -9,6 +9,8 @@ services:
     volumes:
       - $PWD/mariadb_data:/config
       - $PWD/sql:/config/initdb.d/
+    ports:
+      - 3307:3306
   web:
     hostname: web
     build: .

@@ -2,6 +2,5 @@ mutation newFile($file: Upload!) {
     newFile(file: $file) {
         filename
         mimetype
-        encoding
     }
 }

@@ -61,7 +61,6 @@ const typeDefs = gql`
     type File {
         filename: String!
         mimetype: String!
-        encoding: String!
     }
     type Mutation {
         newPost(post_text: String!, post_user_id: Int!, post_parent: Int): Post!
@@ -136,10 +135,13 @@ const resolvers = {
             return client.from("posts").where({ post_id: id }).first();
         },
         newFile: async (parent, { file }) => {
-            const { stream, filename, mimetype, encoding } = await file;
+            console.log("in newfile")
+            const { filename, mimetype, createReadStream } = await file;
+            const stream = createReadStream();
             const metaData = {
                 'Content-Type': mimetype,
             };
+            console.log(stream)
             // put it in the bucket
             minioClient.putObject(BUCKETNAME, filename, stream, (err, objInfo) => {
                 console.log("shouldn't this run?");
@@ -150,7 +152,7 @@ const resolvers = {
                     console.log(objInfo);
                 }
             });
-            return { filename, mimetype, encoding, url: '' };
+            return { filename, mimetype };
         },
     },
     User: {

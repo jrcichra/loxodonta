@@ -21,6 +21,9 @@ export default {
         clientConfigs: {
             default: {
                 httpEndpoint: 'http://localhost:3001/graphql',
+                httpLinkOptions: {
+                    uri: 'http://localhost:3001/graphql',
+                }
             }
         }
     },
