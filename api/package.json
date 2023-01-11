@@ -12,7 +12,7 @@
     "graphql": "^15.5.0",
     "graphql-tools": "^7.0.4",
     "graphql-upload": "^11.0.0",
-    "knex": "^0.21.18",
+    "knex": "^2.4.0",
     "minio": "^7.0.18",
     "moment": "^2.29.4",
     "mysql": "^2.18.1"
