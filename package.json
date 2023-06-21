@@ -15,7 +15,7 @@
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.10.1",
     "graphql-tag": "^2.11.0",
-    "nuxt": "^2.15.4",
+    "nuxt": "^3.4.3",
     "vue": "^2.6.12",
     "vue-google-oauth2": "^1.5.8",
     "vuedraggable": "^2.24.3"
